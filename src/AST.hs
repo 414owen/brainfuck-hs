@@ -1,7 +1,4 @@
-module AST
-  ( AST (..)
-  , ASTNode (..)
-  ) where
+module AST where
 
 type AST = [ASTNode]
 
