@@ -3,8 +3,7 @@ module Lib
     ) where
 
 import Parse
+import Interpret
 
-runBF :: IO ()
-runBF =
-  getContents >>=
-  print . parse
+runBF :: String -> IO ()
+runBF = interpret . parse
