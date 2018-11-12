@@ -13,8 +13,8 @@ data ASTNode =
   | CloseCond AST
 
 nodeToChar :: ASTNode -> Char
-nodeToChar IncPtr    = '>'
-nodeToChar DecPtr    = '<'
+nodeToChar IncPtr        = '>'
+nodeToChar DecPtr        = '<'
 nodeToChar IncData       = '+'
 nodeToChar DecData       = '-'
 nodeToChar Output        = '.'
