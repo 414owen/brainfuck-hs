@@ -5,17 +5,17 @@ module Parse
 import AST
 import Data.Bifunctor
 
-addNode :: ASTNode -> (AST, [AST]) -> (AST, [AST])
-addNode node = first (node:)
+simpleParse :: Char -> Maybe ASTNode
+simpleParse '>' = Just IncPtr
+simpleParse '<' = Just DecPtr
+simpleParse '+' = Just IncData
+simpleParse '-' = Just DecData
+simpleParse '.' = Just Output
+simpleParse ',' = Just Input
+simpleParse _   = Nothing
 
 parseRec :: [AST] -> String -> (AST, [AST])
 parseRec _     []         = ([], [])
-parseRec conds ('>' : xs) = addNode IncPtr  $ parseRec conds xs
-parseRec conds ('<' : xs) = addNode DecPtr  $ parseRec conds xs
-parseRec conds ('+' : xs) = addNode IncData $ parseRec conds xs
-parseRec conds ('-' : xs) = addNode DecData $ parseRec conds xs
-parseRec conds ('.' : xs) = addNode Output  $ parseRec conds xs
-parseRec conds (',' : xs) = addNode Input   $ parseRec conds xs
 parseRec conds ('[' : xs) =
   let recced@(nodes, futureConds) = parseRec (nodes : conds) xs in
     case futureConds of
@@ -25,7 +25,10 @@ parseRec []     (']' : xs) = error "unmatched closing brace"
 parseRec (y:ys) (']' : xs) =
   let recced@(nodes, futureConds) = parseRec ys xs in
     (CloseCond y : nodes, nodes : futureConds)
-parseRec conds (_ : xs) = parseRec conds xs
+parseRec conds (x : xs) = let recced = parseRec conds xs in
+  case simpleParse x of
+    Nothing   -> recced
+    Just node -> first (node:) recced
 
 parse :: String -> AST
 parse = fst . parseRec []
