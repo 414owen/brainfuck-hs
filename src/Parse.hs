@@ -23,7 +23,7 @@ parse = fst . parseRec []
     parseRec (y:ys) (']' : xs) =
       let recced@(nodes, futureConds) = parseRec ys xs in
         (CloseCond y : nodes, nodes : futureConds)
-    parseRec conds (_ : xs) = parse conds xs
+    parseRec conds (_ : xs) = parseRec conds xs
 
     addNode :: ASTNode -> (AST, [AST]) -> (AST, [AST])
     addNode node (nodes, gotos) = (node : nodes, gotos)
