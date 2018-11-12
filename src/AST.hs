@@ -3,11 +3,11 @@ module AST
   , ASTNode (..)
   ) where
 
-newtype AST = AST [ASTNode]
+type AST = [ASTNode]
 
 data ASTNode =
-    IncDataPtr
-  | DecDataPtr
+    IncPtr
+  | DecPtr
   | IncData
   | DecData
   | Output
@@ -16,8 +16,8 @@ data ASTNode =
   | CloseCond AST
 
 nodeToChar :: ASTNode -> Char
-nodeToChar IncDataPtr    = '>'
-nodeToChar DecDataPtr    = '<'
+nodeToChar IncPtr    = '>'
+nodeToChar DecPtr    = '<'
 nodeToChar IncData       = '+'
 nodeToChar DecData       = '-'
 nodeToChar Output        = '.'
@@ -28,5 +28,5 @@ nodeToChar (CloseCond _) = ']'
 instance Show ASTNode where
   show = pure . nodeToChar 
 
-instance Show AST where
-  show (AST nodes) = fmap nodeToChar nodes
+astToStr :: AST -> String
+astToStr nodes = fmap nodeToChar nodes
